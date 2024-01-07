@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.1/math.min.js"></script>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideIn 1s ease-out;
+        }
+
+        #generator {
+            margin-top: 20px;
+            font-size: 24px;
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideIn 1s ease-out;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+    <title>Random Number Generator</title>
+</head>
+<body>
+    <h1>Random Number Generator</h1>
+
+    <div id="generator">
+        <label for="minValue">Minimum Value:</label>
+        <input type="text" id="minValue" placeholder="Enter minimum value">
+        <label for="maxValue">Maximum Value:</label>
+        <input type="text" id="maxValue" placeholder="Enter maximum value">
+        <br>
+        <p id="randomNumber">Click the button to generate a random number.</p>
+        <button onclick="generateRandomNumber()">Generate</button>
+    </div>
+
+    <script>
+        function generateRandomNumber() {
+            var minInput = document.getElementById("minValue").value;
+            var maxInput = document.getElementById("maxValue").value;
+
+            try {
+                var min = math.evaluate(minInput) || 0;
+                var max = math.evaluate(maxInput) || 1;
+            } catch (error) {
+                alert("Invalid input. Please enter valid mathematical expressions.");
+                return;
+            }
+
+            if (min > max) {
+                alert("Minimum value cannot be greater than the maximum value.");
+                return;
+            }
+
+            var randomNumber;
+
+            if (math.isComplex(min) || math.isComplex(max)) {
+                var realPart = math.random(min.re, max.re);
+                var imaginaryPart = math.random(min.im, max.im);
+                randomNumber = math.complex(realPart, imaginaryPart);
+            } else {
+                randomNumber = math.random(min, max);
+            }
+
+            var randomNumberDisplay = document.getElementById("randomNumber");
+            randomNumberDisplay.innerText = "Random Number: " + randomNumber;
+
+            // Triggering slide-in animation
+            randomNumberDisplay.style.animation = 'none';
+            randomNumberDisplay.offsetHeight; /* trigger reflow */
+            randomNumberDisplay.style.animation = null;
+        }
+    </script>
+</body>
+</html>
+
